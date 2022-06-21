@@ -33,7 +33,7 @@ class Database:
                             'title'       : row['title'],
                             'country'     : row['country'],
                             'release_year': row['release_year'],
-                            'listed_in'   : row['listed_in'],
+                            'genre'   : row['listed_in'],
                             'description' : row['description'].strip()
                     }
             )
