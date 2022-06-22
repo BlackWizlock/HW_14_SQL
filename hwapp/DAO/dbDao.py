@@ -14,7 +14,7 @@ class Database:
         return cursor
 
     def search_title(self, title: str):
-        """ Метод класса по поиску названия фильма """
+        """ Поиск фильмов по вхождению в название """
         cursor = self._database_connection()
         sqlite_query = f"""
             SELECT title, country, release_year, listed_in, description 
@@ -37,6 +37,7 @@ class Database:
         return result
 
     def search_year(self, year_first: int, year_second: int):
+        """ Поиск между двумя годами """
         cursor = self._database_connection()
         sqlite_query = f"""
                             SELECT title, release_year 
@@ -59,8 +60,9 @@ class Database:
         return result
 
     def search_rating(self, rating: str):
+        """ Поиск по рейтингу """
         cursor = self._database_connection()
-        sqlite_query = """
+        sqlite_query = f"""
                     SELECT title, rating, description
                     FROM {self.table_name}
                     WHERE rating IN :substring_rating
@@ -79,24 +81,24 @@ class Database:
             )
         return result
 
-
-def search_genre(self, genre: str):
-    cursor = self._database_connection()
-    sqlite_query = f"""
-                        SELECT title, description
-                        FROM {self.table_name}
-                        WHERE listed_in LIKE :substring_genre
-                        ORDER BY release_year DESC
-                        LIMIT 10;
-                    """
-    cursor.execute(sqlite_query, {"substring_genre": f"%{genre}%"})
-    db_results = cursor.fetchall()
-    result = []
-    for row in db_results:
-        result.append(
-                {
-                        'title'      : row['title'],
-                        'description': row['description'].strip()
-                }
-        )
-    return result
+    def search_genre(self, genre: str):
+        """ Поиск по жанру """
+        cursor = self._database_connection()
+        sqlite_query = f"""
+                            SELECT title, description
+                            FROM {self.table_name}
+                            WHERE listed_in LIKE :substring_genre
+                            ORDER BY release_year DESC
+                            LIMIT 10;
+                        """
+        cursor.execute(sqlite_query, {"substring_genre": f"%{genre}%"})
+        db_results = cursor.fetchall()
+        result = []
+        for row in db_results:
+            result.append(
+                    {
+                            'title'      : row['title'],
+                            'description': row['description'].strip()
+                    }
+            )
+        return result
