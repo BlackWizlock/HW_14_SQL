@@ -12,7 +12,7 @@ class SearchRatingReport:
 
 
 RATING_REQUEST = {
-        "children": "'G',",
+        "children": "('G')",
         "family"  : "('G', 'PG', 'PG-13')",
         "adult"   : "('R', 'NC-17')"
 }

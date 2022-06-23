@@ -36,17 +36,15 @@ class Database:
                                       "substring_year_second": f"{year_second}"})
         return cursor.fetchall()
 
-    # TODO: ошибка в квери запросе - исправить
-
     def search_rating(self, rating: str):
         """ Поиск по рейтингу """
         cursor = self._database_connection()
         sqlite_query = f"""
                             SELECT title, rating, description
                             FROM netflix
-                            WHERE rating IN :sub;
+                            WHERE rating IN {rating};
                 """
-        cursor.execute(sqlite_query, {"sub": f"{rating}"})
+        cursor.execute(sqlite_query)
         return cursor.fetchall()
 
     def search_genre(self, genre: str):
@@ -60,4 +58,26 @@ class Database:
                             LIMIT 10;
                         """
         cursor.execute(sqlite_query, {"substring_genre": f"%{genre}%"})
+        return cursor.fetchall()
+
+    def search_all(self, type_movie: str, release_year: int, listed_in: str):
+        cursor = self._database_connection()
+        sqlite_query = f"""
+                            SELECT title, description
+                            FROM netflix
+                            WHERE netflix.type = '{type_movie}'
+                            and release_year = '{release_year}'
+                            and listed_in LIKE '%{listed_in}%'
+                        """
+        cursor.execute(sqlite_query)
+        return cursor.fetchall()
+
+    def search_actors(self, actor1: str, actor2: str):
+        cursor = self._database_connection()
+        sqlite_query = f"""
+                            SELECT `cast`
+                            FROM netflix
+                            WHERE `cast` LIKE '%{actor1}%' and `cast` LIKE '%{actor2}%'
+                        """
+        cursor.execute(sqlite_query)
         return cursor.fetchall()
