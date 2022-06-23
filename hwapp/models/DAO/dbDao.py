@@ -8,11 +8,10 @@ class Database:
     def _database_connection(self):
         """ Подключаем БД SQL, активируем row_factory """
         with sqlite3.connect(self.database) as con:
-            con.row_factory = sqlite3.Row
             cursor = con.cursor()
         return cursor
 
-    def search_title(self, title: str):
+    def search_title(self, title: str) -> list:
         """ Поиск фильмов по вхождению в название """
         cursor = self._database_connection()
         sqlite_query = f"""
@@ -37,15 +36,17 @@ class Database:
                                       "substring_year_second": f"{year_second}"})
         return cursor.fetchall()
 
+    # TODO: ошибка в квери запросе - исправить
+
     def search_rating(self, rating: str):
         """ Поиск по рейтингу """
         cursor = self._database_connection()
         sqlite_query = f"""
                             SELECT title, rating, description
                             FROM netflix
-                            WHERE rating IN :substring_rating
+                            WHERE rating IN :sub;
                 """
-        cursor.execute(sqlite_query, {"substring_rating": f"{rating}"})
+        cursor.execute(sqlite_query, {"sub": f"{rating}"})
         return cursor.fetchall()
 
     def search_genre(self, genre: str):

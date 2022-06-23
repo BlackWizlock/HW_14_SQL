@@ -6,7 +6,7 @@ def create_app(test_config=None):
     app.config.from_mapping(SECRET_KEY="dev")
     app.config["JSON_AS_ASCII"] = False
 
-    from hwapp import hwapp
+    from hwapp.views import hwapp
 
     app.register_blueprint(hwapp.bp)
 
